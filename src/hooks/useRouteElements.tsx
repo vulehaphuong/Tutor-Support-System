@@ -1,0 +1,415 @@
+import Loading from "@/components/Loading";
+import path from "@/constants/path";
+import MainLayout from "@/layouts/MainLayout";
+import ProfileLayout from "@/layouts/ProfileLayout";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import RejectedRoute from "@/components/RejectedRoute";
+import { lazy, Suspense } from "react";
+import { useRoutes } from "react-router-dom";
+import AdminLayout from "@/pages/admin/Layout";
+import AdminWelcome from "@/pages/admin/Home/AdminWelcome";
+import MyProgramLayout from "@/layouts/student/MyProgramLayout";
+
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const Login = lazy(() => import("@/pages/Login"));
+const Program = lazy(() => import("@/pages/student/Program"));
+const ProgramOverview = lazy(() => import("@/pages/student/ProgramOverview/ProgramOverview"));
+const AdminProgram = lazy(() => import("@/pages/admin/Program/Program"));
+const AdminTutor = lazy(() => import("@/pages/admin/Tutor/Tutor"));
+const AdminMentee = lazy(() => import("@/pages/admin/Student/Mentee"));
+const AdminData = lazy(() => import("@/pages/admin/Data/Data"));
+
+const HomePage = lazy(() => import("@/pages/Home/HomePage"));
+
+const StudentProgramMeet = lazy(() => import("@/pages/student/ProgramMeet/ProgramMeet"));
+const TutorProgramMeet = lazy(() => import("@/pages/tutor/ProgramMeet/ProgramMeet"));
+const Library = lazy(() => import("@/pages/student/Library/Library"));
+const ProgramList = lazy(() => import("@/pages/student/ProgramList/ProgramList"));
+const StudentsCompetencies = lazy(() => import("@/pages/student/StudentsCompetencies"));
+const TutorCompetencies = lazy(() => import("@/pages/tutor/TutorCompetencies"));
+const Sessions = lazy(() => import("@/pages/student/Sessions"));
+const ProgramDetail = lazy(() => import("@/pages/student/ProgramDetail"));
+const TutorSessions = lazy(() => import("@/pages/tutor/Sessions/Sessions"));
+const TutorProgramList = lazy(() => import("@/pages/tutor/ProgramList/ProgramList"));
+const TutorProgramDetail = lazy(() => import("@/pages/tutor/ProgramDetail/ProgramDetail"));
+const StudentProfile = lazy(() => import("@/pages/student/Profile"));
+const TutorProfile = lazy(() => import("@/pages/tutor/Profile"));
+const StudentProgress = lazy(() => import("@/pages/student/Progress"));
+const TutorProgress = lazy(() => import("@/pages/tutor/Progress"));
+const StudentMeet = lazy(() => import("@/pages/student/Meet/Meet"));
+const TutorCalendar = lazy(() => import("@/pages/tutor/Calendar/Calendar"));
+const AdminProfile = lazy(() => import("@/pages/admin/Profile"));
+
+export default function useRouteElements() {
+  const routeElements = useRoutes([
+    // Routes that require user to NOT be authenticated (login page)
+    {
+      path: "",
+      element: <RejectedRoute />,
+      children: [
+        {
+          path: path.login,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <Login />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+    // Protected routes - require authentication
+    {
+      path: "",
+      element: <ProtectedRoute />,
+      children: [
+        // Home page - accessible by all authenticated users
+        {
+          path: path.home,
+          element: <MainLayout />,
+          children: [
+            {
+              index: true,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <HomePage />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+        // Library - accessible by all authenticated users
+        {
+          path: path.library,
+          element: <MainLayout />,
+          children: [
+            {
+              index: true,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Library />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+        // Student routes - only accessible by students
+        {
+          path: "",
+          element: <ProtectedRoute allowedRoles={["student"]} />,
+          children: [
+            // Student Profile with ProfileLayout
+            {
+              path: path.studentProfile,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentProfile />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.studentMeetings,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentMeet />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.studentProgress,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentProgress />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.student,
+              element: <MainLayout />,
+              children: [
+                {
+                  path: path.studentPrograms,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Program />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.studentProgramDetail,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramOverview />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.studentProgramList,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramList />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.student,
+              element: <MyProgramLayout />,
+              children: [
+                {
+                  path: path.studentProgramCompetencies,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentsCompetencies />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.studentSessions,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Sessions />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.studentProgramDetailView,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramDetail />
+                    </Suspense>
+                  ),
+                },
+                {
+                  // path: path.studentMyProgramDetail,
+                  path: path.studentProgramMeet,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <StudentProgramMeet />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+          ],
+        },
+        // Tutor routes - only accessible by tutors
+        {
+          path: "",
+          element: <ProtectedRoute allowedRoles={["tutor"]} />,
+          children: [
+            // Tutor Profile with ProfileLayout
+            {
+              path: path.tutorProfile,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProfile />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.tutorProgress,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgress />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.tutorCalendar,
+              element: <ProfileLayout />,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorCalendar />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.tutor,
+              element: <MainLayout />,
+              children: [
+                {
+                  path: path.tutorPrograms,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <Program />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorProgramDetail,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <ProgramOverview />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorProgramList,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgramList />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+            {
+              path: path.tutor,
+              element: <MyProgramLayout />,
+              children: [
+                {
+                  path: path.tutorProgramDetailView,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgramDetail />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorSessions,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorSessions />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorProgramMeet,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorProgramMeet />
+                    </Suspense>
+                  ),
+                },
+                {
+                  path: path.tutorProgramCompetencies,
+                  element: (
+                    <Suspense fallback={<Loading />}>
+                      <TutorCompetencies />
+                    </Suspense>
+                  ),
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    // Admin routes - only accessible by admins
+    {
+      path: "",
+      element: <ProtectedRoute allowedRoles={["admin"]} />,
+      children: [
+        // Admin Profile with ProfileLayout
+        {
+          path: path.adminProfile,
+          element: <ProfileLayout />,
+          children: [
+            {
+              index: true,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <AdminProfile />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: path.admin,
+      element: <AdminLayout />,
+      children: [
+        {
+          index: true,
+          element: <AdminWelcome />,
+        },
+        {
+          path: path.adminPrograms,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminProgram />
+            </Suspense>
+          ),
+        },
+        {
+          path: path.adminTutors,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminTutor />
+            </Suspense>
+          ),
+        },
+        {
+          path: path.adminMentees,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminMentee />
+            </Suspense>
+          ),
+        },
+        {
+          path: path.adminData,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AdminData />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+    // 404 page - accessible by all users
+    {
+      path: "*",
+      element: <MainLayout />,
+      children: [
+        {
+          path: "*",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <NotFound />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+  ]);
+  return routeElements;
+}
