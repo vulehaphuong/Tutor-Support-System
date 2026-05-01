@@ -4,9 +4,11 @@ A modern web application built with React + TypeScript + Vite and Supabase for b
 
 #### 🔑 Demo Accounts
 
-The project comes with pre-set sample accounts featuring 3 distinct roles for immediate application testing. (Detailed configuration available in [`src/utils/auth.ts`](src/utils/auth.ts)).
+The project comes with pre-set sample accounts featuring 3 distinct roles for immediate application testing. 
+(Detailed configuration available in [`src/utils/auth.ts`](src/utils/auth.ts)).
 
-Dự án cung cấp sẵn các tài khoản mẫu với 3 phân quyền khác nhau để bạn có thể trải nghiệm ngay ứng dụng. (Cấu hình chi tiết tại file [`src/utils/auth.ts`](src/utils/auth.ts)).
+Dự án cung cấp sẵn các tài khoản mẫu với 3 phân quyền khác nhau để bạn có thể trải nghiệm ngay ứng dụng. 
+(Cấu hình chi tiết tại file [`src/utils/auth.ts`](src/utils/auth.ts)).
 
 | Vai trò (Role) | Tên đăng nhập (Username) | Mật khẩu (Password) |
 | :--- | :--- | :--- |
